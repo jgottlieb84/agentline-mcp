@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agentline-mcp"
+version = "0.1.1"
+description = "MCP server for Agentline — give your AI agent a phone number, email, SMS, and voice calls."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "Agentline", email = "support@agentline.co" }]
+keywords = [
+    "mcp",
+    "model-context-protocol",
+    "agentline",
+    "agents",
+    "ai",
+    "sms",
+    "2fa",
+    "voice",
+    "email",
+    "telephony",
+    "claude",
+    "anthropic",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Communications :: Telephony",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "mcp>=1.2",
+    "agentline>=0.1.0",
+]
+
+[project.scripts]
+agentline-mcp = "agentline_mcp.__main__:main"
+
+[project.urls]
+Homepage = "https://www.agentline.co"
+Documentation = "https://www.agentline.co/docs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["agentline_mcp"]
+
+[tool.hatch.build.targets.sdist]
+include = ["agentline_mcp", "README.md", "LICENSE"]
