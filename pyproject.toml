@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentline-mcp"
-version = "0.2.0"
+version = "0.3.0"
 description = "MCP server for Agentline — give your AI agent a phone number, email, SMS, and voice calls."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -39,7 +39,7 @@ classifiers = [
 ]
 dependencies = [
     "mcp>=1.2,<2",
-    "agentline>=0.2.0",
+    "agentline>=0.3.0",
 ]
 
 [project.scripts]
