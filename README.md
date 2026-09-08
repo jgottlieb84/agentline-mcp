@@ -96,7 +96,7 @@ Use the same `uvx agentline-mcp` command and set `AGENTLINE_API_KEY` in the serv
 ### SMS
 - `send_sms` — send an outbound SMS
 - `wait_for_sms` — long-poll for the next inbound SMS (with optional regex match)
-- `capture_code` — **the killer flow.** Provision + wait for 2FA code + release, in one call
+- `capture_code(phone_number, since, timeout)` — wait for a code on an existing number after submitting signup; `since` is the UTC timestamp recorded before submission.
 
 ### Voice
 - `make_call` — place an outbound AI voice call (non-blocking, returns call_id)
@@ -109,7 +109,7 @@ Use the same `uvx agentline-mcp` command and set `AGENTLINE_API_KEY` in the serv
 - `release_email_address` — release
 - `send_email` — send an outbound email
 - `wait_for_email` — long-poll for an inbound email
-- `capture_email_code` — provision + wait for email-based verification code + release
+- `capture_email_code(email_address, since, timeout)` — wait on an existing email address after submitting signup.
 
 ## Example prompts
 
@@ -129,3 +129,5 @@ Use the same `uvx agentline-mcp` command and set `AGENTLINE_API_KEY` in the serv
 ## License
 
 MIT
+
+SDK 0.2 compatibility: install the matching SDK before this MCP release. Set `AGENTLINE_BASE_URL` to your Vercel project origin. Provision an address first, submit signup, then call a capture tool with the address and a UTC `since` timestamp recorded before submission. Release the address when finished.

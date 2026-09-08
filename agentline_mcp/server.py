@@ -161,42 +161,19 @@ def wait_for_sms(
 
 
 @mcp.tool()
-def capture_code(
-    area_code: str | None = None,
-    timeout: float = DEFAULT_WAIT_TIMEOUT,
-    release_after: bool = True,
-) -> dict:
-    """All-in-one 2FA capture: provision a fresh phone number, wait for an
-    incoming SMS verification code (4-8 digits by default), then release the
-    number. THE killer flow for signups.
+def capture_code(phone_number: str, since: str, timeout: float = DEFAULT_WAIT_TIMEOUT) -> dict:
+    """Capture a code for an ALREADY provisioned number after submitting signup.
 
-    Typical use: call this, take `phone_number` from the result and paste into
-    the signup form, then `code` will be the extracted 2FA code once it arrives.
-    If no code arrives in `timeout` seconds, `code` is null.
-
-    Set `release_after=False` if you plan to keep using the number.
+    First provision_number, record a UTC ISO timestamp, submit the phone in
+    the signup form, then call this tool with that timestamp as since. Release
+    the number separately when finished. This tool never provisions a number.
     """
     try:
-        client = _client_or_init()
-        number = client.provision_number(area_code=area_code)
-        try:
-            code = client.get_verification_code(
-                number.phone_number,
-                timeout=_clamp_timeout(timeout),
-            )
-            return {
-                "phone_number": number.phone_number,
-                "code": code,
-                "released": release_after,
-            }
-        finally:
-            if release_after:
-                client.release_number(number.phone_number)
+        code = _client_or_init().get_verification_code(phone_number, timeout=_clamp_timeout(timeout), since=since)
+        return {"phone_number": phone_number, "code": code, "status": "received" if code else "timeout"}
     except AgentlineError as e:
         return {"error": str(e), "status_code": e.status_code}
 
-
-# ── Voice calls ──────────────────────────────────────────────────────
 
 @mcp.tool()
 def make_call(
@@ -353,34 +330,16 @@ def wait_for_email(
 
 
 @mcp.tool()
-def capture_email_code(
-    local_part: str | None = None,
-    timeout: float = DEFAULT_WAIT_TIMEOUT,
-    release_after: bool = True,
-) -> dict:
-    """All-in-one email verification capture: provision an email address, wait
-    for an incoming verification code (4-8 digits by default), release the
-    address. Use for services that email verification codes instead of SMS.
+def capture_email_code(email_address: str, since: str, timeout: float = DEFAULT_WAIT_TIMEOUT) -> dict:
+    """Capture a code for an existing email address after submitting signup.
 
-    Returns `email_address` (paste into the signup form) and `code` (the
-    captured verification code). `code` is null on timeout.
+    First create_email_address, record a UTC ISO timestamp, submit the email
+    in the signup form, then pass that timestamp as since. Release the email
+    separately when finished. This tool never provisions an address.
     """
     try:
-        client = _client_or_init()
-        addr = client.create_email_address(local_part=local_part)
-        try:
-            code = client.get_email_verification_code(
-                addr.email_address,
-                timeout=_clamp_timeout(timeout),
-            )
-            return {
-                "email_address": addr.email_address,
-                "code": code,
-                "released": release_after,
-            }
-        finally:
-            if release_after:
-                client.release_email_address(addr.id)
+        code = _client_or_init().get_email_verification_code(email_address, timeout=_clamp_timeout(timeout), since=since)
+        return {"email_address": email_address, "code": code, "status": "received" if code else "timeout"}
     except AgentlineError as e:
         return {"error": str(e), "status_code": e.status_code}
 
