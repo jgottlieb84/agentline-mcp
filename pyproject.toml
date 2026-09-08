@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentline-mcp"
-version = "0.1.1"
+version = "0.2.0"
 description = "MCP server for Agentline — give your AI agent a phone number, email, SMS, and voice calls."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -38,8 +38,8 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "mcp>=1.2",
-    "agentline>=0.1.0",
+    "mcp>=1.2,<2",
+    "agentline>=0.2.0",
 ]
 
 [project.scripts]
@@ -48,6 +48,8 @@ agentline-mcp = "agentline_mcp.__main__:main"
 [project.urls]
 Homepage = "https://www.agentline.co"
 Documentation = "https://www.agentline.co/docs"
+Repository = "https://github.com/jgottlieb84/agentline-mcp"
+Issues = "https://github.com/jgottlieb84/agentline-mcp/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["agentline_mcp"]
